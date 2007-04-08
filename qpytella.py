@@ -15,12 +15,12 @@ hostfilename = 'hosts.txt'
 MAX_PAGE_LEN = 20000
 SERVEPORT = 7770
 
-payloadType = {	'Ping'		= '\x00'
-		'Pong'		= '\x01'
-		'Bye'		= '\x02'
-		'Push'		= '\x40'
-		'Query'		= '\x80'
-		'Query Hit'	= '\x81' }
+payloadType = {'Ping'		: '\x00',
+		'Pong'		: '\x01',
+		'Bye'		: '\x02',
+		'Push'		: '\x40',
+		'Query'		: '\x80',
+		'Query Hit'	: '\x81' }
 
 class server:
 	def __init__(self):
@@ -75,9 +75,12 @@ class Connection:
 			return None
 
 		except socket.error:
-			self.wSocket.close()
-			self.rSocket.close()
-			servantSocket.close()
+			try:
+				self.wSocket.close()
+				self.rSocket.close()
+				servantSocket.close()
+			except:
+				print "Something is horribly wrong!"
 			self.connected = False
 			return
 		
@@ -89,10 +92,11 @@ class Connection:
 		payload = ''
 		self.sendMessage(guid, payloadType, ttl, hops, payload)
 		
-	def sendPong(self,  guid, ttl, host, port, sizeShared, ,numShared):
+	def sendPong(self,  guid, ttl, host, port, sizeShared, numShared):
 		payload = str(port) + str(host) + str(numShared) + str(sizeShared)
 		payloadType = '\x01' #Pong
-		sendMessage(self, guid, payloadType, ttl, hops = '0', payload)
+		hops = 0
+		sendMessage(self, guid, payloadType, ttl, hops, payload)
 	
 	def sendQuery(self, firewalled, criteria):
 		newSemantic = '1'
@@ -108,11 +112,12 @@ class Connection:
 		guid = generateGUID
 		payloadType = '\x80'
 		ttl = 7
+		hops = 0
+		self.sendMessage(guid, payloadType, ttl, 0, payload)
 		
-		self.sendMessage(guid, payloadType, ttl, hops = 0, payload)
-		
-	def sendQueryHit(self, numHits, port, host, speed, 
+	def sendQueryHit(self, numHits, port, host, speed):
 		###################TODO
+		pass
 
 	def sendMessage(self, guid, payloadType, ttl, hops, payload):
 		payloadLength = len(payload)
