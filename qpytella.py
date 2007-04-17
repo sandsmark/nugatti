@@ -186,15 +186,15 @@ class Hosts:
 		return hostlist
 	
 
-hosts = Hosts()
-debug(hosts.list)
-for address in hosts.list:
-	ip = address.split(':',1)[0]
-	port = int(address.split(':',1)[1])
-	print ip, port
-	host = Connection((ip, port))
-	if (host.connected == True):
-		break
+#hosts = Hosts()
+#debug(hosts.list)
+#for address in hosts.list:
+	#ip = address.split(':',1)[0]
+	#port = int(address.split(':',1)[1])
+	#print ip, port
+	#host = Connection((ip, port))
+	#if (host.connected == True):
+		#break
 
 
 #server.serve_forever()

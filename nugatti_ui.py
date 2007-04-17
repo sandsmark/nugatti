@@ -13,7 +13,6 @@ from kdeui import *
 
 class Nugatti(QDialog):
     def __init__(self,parent = None,name = None,modal = 0,fl = 0):
-	connection = con()
         QDialog.__init__(self,parent,name,modal,fl)
 
         if not name:
@@ -113,9 +112,6 @@ class Nugatti(QDialog):
 
         self.resize(QSize(739,434).expandedTo(self.minimumSizeHint()))
         self.clearWState(Qt.WState_Polished)
-
-        self.connect(self.buttonQuit,SIGNAL("clicked()"),self.accept)
-	self.connect(self.buttonSearch,SIGNAL("clicked()"),connection.search())
 
 
     def languageChange(self):
