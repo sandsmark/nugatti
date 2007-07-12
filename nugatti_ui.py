@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'nugatti.ui'
+# Form implementation generated from reading ui file 'nugatti_ui.ui'
 #
-# Created: Fri Mar 9 12:00:15 2007
+# Created: Tue Apr 17 22:12:28 2007
 #      by: The PyQt User Interface Compiler (pyuic) 3.17
 #
 # WARNING! All changes made in this file will be lost!
@@ -11,16 +11,16 @@
 from qt import *
 from kdeui import *
 
-class Nugatti(QDialog):
+class Nugatti_ui(QDialog):
     def __init__(self,parent = None,name = None,modal = 0,fl = 0):
         QDialog.__init__(self,parent,name,modal,fl)
 
         if not name:
-            self.setName("Nugatti")
+            self.setName("Nugatti_ui")
 
         self.setSizeGripEnabled(1)
 
-        NugattiLayout = QVBoxLayout(self,11,6,"NugattiLayout")
+        Nugatti_uiLayout = QVBoxLayout(self,11,6,"Nugatti_uiLayout")
 
         self.tab = QTabWidget(self,"tab")
 
@@ -36,6 +36,7 @@ class Nugatti(QDialog):
         layoutSearchTop.addWidget(self.search)
 
         self.buttonSearch = QPushButton(self.Widget8,"buttonSearch")
+        self.buttonSearch.setDefault(1)
         layoutSearchTop.addWidget(self.buttonSearch)
         Widget8Layout.addLayout(layoutSearchTop)
 
@@ -84,7 +85,7 @@ class Nugatti(QDialog):
         layoutDownloadsBottom.addWidget(self.buttonCancelDownload)
         Widget9Layout.addLayout(layoutDownloadsBottom)
         self.tab.insertTab(self.Widget9,QString.fromLatin1(""))
-        NugattiLayout.addWidget(self.tab)
+        Nugatti_uiLayout.addWidget(self.tab)
 
         layoutBottom = QHBoxLayout(None,0,6,"layoutBottom")
 
@@ -104,14 +105,16 @@ class Nugatti(QDialog):
 
         self.buttonQuit = QPushButton(self,"buttonQuit")
         self.buttonQuit.setAutoDefault(1)
-        self.buttonQuit.setDefault(1)
+        self.buttonQuit.setDefault(0)
         layoutBottom.addWidget(self.buttonQuit)
-        NugattiLayout.addLayout(layoutBottom)
+        Nugatti_uiLayout.addLayout(layoutBottom)
 
         self.languageChange()
 
-        self.resize(QSize(739,434).expandedTo(self.minimumSizeHint()))
+        self.resize(QSize(776,470).expandedTo(self.minimumSizeHint()))
         self.clearWState(Qt.WState_Polished)
+
+        self.connect(self.buttonQuit,SIGNAL("clicked()"),self.accept)
 
 
     def languageChange(self):
@@ -137,8 +140,8 @@ class Nugatti(QDialog):
         self.buttonHelp.setAccel(QKeySequence(self.__tr("F1")))
         self.labelConnected.setText(self.__tr("Connected:"))
         self.buttonQuit.setText(self.__tr("&QUIT"))
-        self.buttonQuit.setAccel(QKeySequence(self.__tr("Alt+Q")))
+        self.buttonQuit.setAccel(QKeySequence(self.__tr("Ctrl+Q")))
 
 
     def __tr(self,s,c = None):
-        return qApp.translate("Nugatti",s,c)
+        return qApp.translate("Nugatti_ui",s,c)

@@ -18,7 +18,10 @@
    sodipodi:docbase="/home/martin/Prosjekter/Nugatti"
    sodipodi:docname="icon.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   sodipodi:modified="true">
+   inkscape:export-filename="/home/martin/Prosjekter/Nugatti/icon.png"
+   inkscape:export-xdpi="360"
+   inkscape:export-ydpi="360"
+   sodipodi:modified="TRUE">
   <defs
      id="defs4">
     <linearGradient
@@ -126,7 +129,7 @@
        x2="43.894768"
        y2="12.139585"
        gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.96875,0,0,0.925,0.7260472,0.1100249)" />
+       gradientTransform="matrix(1.0935254,0,0,1.0441404,-1.6199187,-1.9131081)" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5161"
@@ -135,7 +138,8 @@
        y1="31.712828"
        x2="37.130539"
        y2="38.498543"
-       gradientUnits="userSpaceOnUse" />
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.1288004,0,0,1.1288004,-2.4394811,-2.0373042)" />
     <clipPath
        clipPathUnits="userSpaceOnUse"
        id="clipPath8134">
@@ -171,17 +175,6 @@
        x2="39.044254"
        y2="15.025899"
        gradientUnits="userSpaceOnUse" />
-    <radialGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient12106"
-       id="radialGradient12235"
-       cx="23.738585"
-       cy="41.181469"
-       fx="23.738585"
-       fy="41.181469"
-       r="12.860999"
-       gradientTransform="matrix(1,0,0,0.3127412,0,28.302327)"
-       gradientUnits="userSpaceOnUse" />
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient5161"
@@ -209,6 +202,54 @@
        x2="22.986"
        y2="28.74375"
        gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient12106"
+       id="linearGradient14209"
+       x1="10.877586"
+       y1="41.181469"
+       x2="36.599583"
+       y2="41.181469"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient12143"
+       id="linearGradient15188"
+       gradientUnits="userSpaceOnUse"
+       x1="10.902"
+       y1="28.74375"
+       x2="22.986"
+       y2="28.74375" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient12143"
+       id="linearGradient15190"
+       gradientUnits="userSpaceOnUse"
+       x1="10.902"
+       y1="28.74375"
+       x2="22.986"
+       y2="28.74375" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient12143"
+       id="linearGradient15192"
+       gradientUnits="userSpaceOnUse"
+       x1="10.902"
+       y1="28.74375"
+       x2="22.986"
+       y2="28.74375" />
+    <filter
+       inkscape:collect="always"
+       x="-0.15734037"
+       width="1.3146807"
+       y="-0.19205061"
+       height="1.3841012"
+       id="filter18189">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.95065052"
+         id="feGaussianBlur18191" />
+    </filter>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -220,17 +261,17 @@
      objecttolerance="10"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="7.9195959"
-     inkscape:cx="29.148029"
-     inkscape:cy="27.824588"
+     inkscape:zoom="5.6"
+     inkscape:cx="13.034501"
+     inkscape:cy="21.187167"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      width="48px"
      height="48px"
      inkscape:window-width="827"
      inkscape:window-height="585"
-     inkscape:window-x="553"
-     inkscape:window-y="473" />
+     inkscape:window-x="763"
+     inkscape:window-y="541" />
   <metadata
      id="metadata7">
     <rdf:RDF>
@@ -247,13 +288,13 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:url(#linearGradient7151);fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1.0"
-       d="M 7.8286822,15.170042 L 11.364216,39.91878 C 20.28723,46.316412 31.230549,44.632825 37.375644,38.656089 L 41.416254,13.149737 L 7.8286822,15.170042 z "
+       style="fill:url(#linearGradient7151);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       d="M 6.3975386,15.086646 L 10.388451,43.023031 C 20.460752,50.244681 32.813575,48.344247 39.75016,41.597705 L 44.311203,12.806124 L 6.3975386,15.086646 z "
        id="path3213"
        sodipodi:nodetypes="ccccc" />
     <path
        sodipodi:type="arc"
-       style="fill:url(#linearGradient12243);fill-opacity:1.0;fill-rule:nonzero;stroke:none;stroke-width:0.91641551;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:url(#linearGradient12243);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.91641551;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="path3219"
        sodipodi:cx="23.738585"
        sodipodi:cy="41.181469"
@@ -263,17 +304,17 @@
        sodipodi:start="0"
        sodipodi:end="6.266819"
        sodipodi:open="true"
-       transform="matrix(1.543056,0,0,2.021678,-12.891383,-70.110931)" />
+       transform="matrix(1.7418022,0,0,2.282071,-16.99128,-81.178552)" />
     <rect
-       style="fill:url(#linearGradient6158);fill-opacity:1.0;fill-rule:nonzero;stroke:none;stroke-width:0.91641551;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:url(#linearGradient6158);fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:0.91641551;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        id="rect3221"
-       width="38.164825"
-       height="4.6719561"
-       x="4.6403885"
-       y="9.0031633"
-       ry="0.31745595" />
+       width="43.080471"
+       height="5.273706"
+       x="2.7985914"
+       y="8.1254702"
+       ry="0.35834441" />
     <path
-       transform="matrix(1.4781245,0,0,2.0265607,-11.413137,-74.312007)"
+       transform="matrix(1.6717036,0,0,2.0971974,-15.398507,-77.367726)"
        sodipodi:open="true"
        sodipodi:end="6.266819"
        sodipodi:start="0"
@@ -283,7 +324,7 @@
        sodipodi:cy="41.181469"
        sodipodi:cx="23.738585"
        id="path3217"
-       style="fill:url(#radialGradient12235);fill-opacity:1.0;fill-rule:nonzero;stroke:url(#linearGradient10098);stroke-width:0.97326034;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:url(#linearGradient14209);fill-opacity:1;fill-rule:nonzero;stroke:url(#linearGradient10098);stroke-width:0.97326034;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        sodipodi:type="arc" />
     <path
        sodipodi:type="arc"
@@ -297,35 +338,37 @@
        sodipodi:start="0"
        sodipodi:end="6.266819"
        sodipodi:open="true"
-       transform="matrix(0.9267857,0,0,0.9645031,2.0505058,-1.3133355)"
+       transform="matrix(1.0663132,0,0,1.0887315,-0.3844822,-3.2347326)"
        clip-path="url(#clipPath8134)" />
     <flowRoot
        xml:space="preserve"
        id="flowRoot12207"
-       style="font-family:cmsy10;fill:url(#linearGradient13238);fill-opacity:1.0"
-       transform="matrix(1.491116,0,0,1.7014948,-1.3135369,-17.701345)"><flowRegion
+       style="fill:#000000;fill-opacity:1;filter:url(#filter18189);font-family:cmsy10"
+       transform="matrix(1.6831723,0,0,1.920648,-3.089927,-21.898977)"
+       inkscape:export-xdpi="120"
+       inkscape:export-ydpi="120"><flowRegion
          id="flowRegion12209"
-         style="fill-opacity:1.0;fill:url(#linearGradient13238)"><rect
+         style="fill:url(#linearGradient13238);fill-opacity:1"><rect
            id="rect12211"
            width="26.516504"
            height="23.233509"
            x="11.237947"
            y="21.104689"
-           style="font-family:cmsy10;fill:url(#linearGradient13238);fill-opacity:1.0" /></flowRegion><flowPara
+           style="fill:#000000;fill-opacity:1;font-family:cmsy10" /></flowRegion><flowPara
          id="flowPara12213"
-         style="fill-opacity:1.0;fill:url(#linearGradient13238)">N</flowPara></flowRoot>    <flowRoot
-       transform="matrix(1.491116,0,0,1.7014948,-0.8084606,-18.206421)"
-       style="fill:url(#linearGradient13228);font-family:cmsy10;fill-opacity:1.0"
+         style="fill:#000000;fill-opacity:1">N</flowPara></flowRoot>    <flowRoot
+       transform="matrix(1.6831723,0,0,1.920648,-3.5658706,-23.158849)"
+       style="fill:url(#linearGradient13228);fill-opacity:1;font-family:cmsy10"
        id="flowRoot12245"
        xml:space="preserve"><flowRegion
          id="flowRegion12247"
-         style="fill-opacity:1.0;fill:url(#linearGradient13228)"><rect
-           style="fill:url(#linearGradient13228);font-family:cmsy10;fill-opacity:1.0"
+         style="fill:url(#linearGradient15188);fill-opacity:1"><rect
+           style="fill:url(#linearGradient15190);fill-opacity:1;font-family:cmsy10"
            y="21.104689"
            x="11.237947"
            height="23.233509"
            width="26.516504"
            id="rect12249" /></flowRegion><flowPara
          id="flowPara12251"
-         style="fill-opacity:1.0;fill:url(#linearGradient13228)">N</flowPara></flowRoot>  </g>
+         style="fill:url(#linearGradient15192);fill-opacity:1">N</flowPara></flowRoot>  </g>
 </svg>

@@ -1,22 +1,22 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>Nugatti</class>
+<class>Nugatti_ui</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>Nugatti</cstring>
+        <cstring>Nugatti_ui</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>739</width>
-            <height>434</height>
+            <width>854</width>
+            <height>576</height>
         </rect>
     </property>
     <property name="caption">
         <string>Nugatti</string>
     </property>
     <property name="sizeGripEnabled">
-        <bool>true</bool>
+        <bool>false</bool>
     </property>
     <vbox>
         <property name="name">
@@ -37,7 +37,7 @@
                     <cstring>Widget8</cstring>
                 </property>
                 <attribute name="title">
-                    <string>S&amp;earch</string>
+                    <string>Sear&amp;ch</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -56,7 +56,10 @@
                                     <cstring>labelSearch</cstring>
                                 </property>
                                 <property name="text">
-                                    <string>Search:</string>
+                                    <string>&lt;b&gt;search:&lt;/b&gt;</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignVCenter</set>
                                 </property>
                             </widget>
                             <widget class="QLineEdit">
@@ -68,11 +71,19 @@
                                 <property name="name">
                                     <cstring>buttonSearch</cstring>
                                 </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>1</bold>
+                                    </font>
+                                </property>
                                 <property name="text">
-                                    <string>&amp;search</string>
+                                    <string>se&amp;arch</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+S</string>
+                                    <string>Alt+A</string>
+                                </property>
+                                <property name="default">
+                                    <bool>true</bool>
                                 </property>
                             </widget>
                         </hbox>
@@ -89,8 +100,25 @@
                                 <bool>true</bool>
                             </property>
                         </column>
+                        <column>
+                            <property name="text">
+                                <string>peers</string>
+                            </property>
+                            <property name="clickable">
+                                <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>true</bool>
+                            </property>
+                        </column>
                         <property name="name">
                             <cstring>listSearch</cstring>
+                        </property>
+                        <property name="allColumnsShowFocus">
+                            <bool>false</bool>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>AllColumns</enum>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget">
@@ -129,16 +157,42 @@
                                 <property name="name">
                                     <cstring>progressSearch</cstring>
                                 </property>
+                                <property name="frameShape">
+                                    <enum>NoFrame</enum>
+                                </property>
+                                <property name="lineWidth">
+                                    <number>1</number>
+                                </property>
+                                <property name="midLineWidth">
+                                    <number>0</number>
+                                </property>
+                                <property name="progress">
+                                    <number>77</number>
+                                </property>
+                                <property name="centerIndicator">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="indicatorFollowsStyle">
+                                    <bool>true</bool>
+                                </property>
+                                <property name="percentageVisible">
+                                    <bool>true</bool>
+                                </property>
                             </widget>
                             <widget class="QPushButton">
                                 <property name="name">
                                     <cstring>buttonDownload</cstring>
                                 </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>1</bold>
+                                    </font>
+                                </property>
                                 <property name="text">
                                     <string>&amp;Download</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+D</string>
+                                    <string>D</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -150,7 +204,7 @@
                     <cstring>Widget9</cstring>
                 </property>
                 <attribute name="title">
-                    <string>Downloads</string>
+                    <string>Dow&amp;nloads</string>
                 </attribute>
                 <vbox>
                     <property name="name">
@@ -181,6 +235,9 @@
                         </column>
                         <property name="name">
                             <cstring>listDownloads</cstring>
+                        </property>
+                        <property name="resizeMode">
+                            <enum>AllColumns</enum>
                         </property>
                     </widget>
                     <widget class="QLayoutWidget">
@@ -228,11 +285,16 @@
                                 <property name="name">
                                     <cstring>buttonCancelDownload</cstring>
                                 </property>
+                                <property name="font">
+                                    <font>
+                                        <bold>1</bold>
+                                    </font>
+                                </property>
                                 <property name="text">
                                     <string>&amp;Cancel download</string>
                                 </property>
                                 <property name="accel">
-                                    <string>Alt+C</string>
+                                    <string>C</string>
                                 </property>
                             </widget>
                         </hbox>
@@ -242,7 +304,7 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layoutBottom</cstring>
+                <cstring>bottomLayout</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -262,9 +324,17 @@
                         <bool>true</bool>
                     </property>
                 </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>copyrightLabel</cstring>
+                    </property>
+                    <property name="text">
+                        <string>copyright mts productions 2007</string>
+                    </property>
+                </widget>
                 <spacer>
                     <property name="name">
-                        <cstring>spacingLeftBottom</cstring>
+                        <cstring>spacingLeftBottom_2</cstring>
                     </property>
                     <property name="orientation">
                         <enum>Horizontal</enum>
@@ -274,7 +344,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>260</width>
+                            <width>390</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -284,12 +354,29 @@
                         <cstring>labelConnected</cstring>
                     </property>
                     <property name="text">
-                        <string>Connected:</string>
+                        <string>connected:</string>
                     </property>
                 </widget>
                 <widget class="KLed">
                     <property name="name">
                         <cstring>ledConnected</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>0</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="darkFactor">
+                        <number>300</number>
                     </property>
                 </widget>
                 <spacer>
@@ -304,7 +391,7 @@
                     </property>
                     <property name="sizeHint">
                         <size>
-                            <width>21</width>
+                            <width>186</width>
                             <height>20</height>
                         </size>
                     </property>
@@ -313,17 +400,25 @@
                     <property name="name">
                         <cstring>buttonQuit</cstring>
                     </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
                     <property name="text">
                         <string>&amp;QUIT</string>
                     </property>
                     <property name="accel">
-                        <string>Alt+Q</string>
+                        <string>Ctrl+Q</string>
                     </property>
                     <property name="autoDefault">
                         <bool>true</bool>
                     </property>
                     <property name="default">
-                        <bool>true</bool>
+                        <bool>false</bool>
                     </property>
                 </widget>
             </hbox>
@@ -334,7 +429,7 @@
     <connection>
         <sender>buttonQuit</sender>
         <signal>clicked()</signal>
-        <receiver>Nugatti</receiver>
+        <receiver>Nugatti_ui</receiver>
         <slot>accept()</slot>
     </connection>
 </connections>

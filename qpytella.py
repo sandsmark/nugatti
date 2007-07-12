@@ -1,30 +1,39 @@
-#####################
-"""Nugatti - Nutella Python Qt """
-""" network stuff """
-#TODO sendQueryHit
+########################################
+"""  Nugatti  v0.01                  """
+"""   - GNUtella/Python/Qt           """
+"""                                  """
+"""     ~    network stuff    ~      """
+########################################
+"""COPYRIGHT MARTIN T. SANDSMARK 2007"""
+########################################
+
+#TODO: Implement not-really-needed-stuff, testing if it connects
+
 import BaseHTTPServer, SimpleHTTPServer
 import os, urllib, sys, socket, random
 
-os.chdir('/home/martin/Stuff/Downloads')
-
 #version = '?hostfile=1&client=QPYT&version=0.1'
 
-hostfilename = 'hosts.txt'
+
 #gwebcache = gwebcache + version
 
 MAX_PAGE_LEN = 20000
 SERVEPORT = 7770
+VENDORCODE = 'NUGT'
+HOSTFILENAME = 'hosts.txt'
+DOWNLOADDIR = '/home/martin/Downloads'
+WEBCACHE = 'http://gwc.dietpac.com:8080/?hostfile=1&client=QPYT&version=0.1'
+DEBUG = 0
 
-payloadType = {'Ping'		: '\x00',
-		'Pong'		: '\x01',
-		'Bye'		: '\x02',
-		'Push'		: '\x40',
-		'Query'		: '\x80',
-		'Query Hit'	: '\x81' }
+#payloadType = {'Ping'		: '\x00',
+		#'Pong'		: '\x01',
+		#'Bye'		: '\x02',
+		#'Push'		: '\x40',
+		#'Query'		: '\x80',
+		#'Query Hit'	: '\x81' }
 
 class server:
 	def __init__(self):
-		server = BaseHTTPServer.HTTPServer(('',SERVEPORT),SimpleHTTPServer.SimpleHTTPRequestHandler)
 		return
 
 def addressToTuple(combined):
@@ -32,16 +41,56 @@ def addressToTuple(combined):
 	return (addressAndPort[0], addressAndPort[1])
 
 def debug(message):
-	#print message
+	if DEBUG print message
 	return
 
-class Connection:
+def alert(message):
+	print message
+
+def generateGUID(self):
+	guid = ''
+	for i in range(7):
+		guid = guid + chr(random.randint(0,255))
+	guid = guid + '\xff'
+	for i in range(6):
+		guid = guid + chr(random.randint(0,255))
+	guid = guid + '\x00'
+	return guid
+
+def getFile(ip, port, path):
+	queryAddress = 'http://' + ip + ':' + port + '/' + path
 	
+
+class fileList:
+	fileID[] = 0
+	fileName[] = ''
+	filePath[] = ''
+	fileSize[] = 0
+	fileExtended[] = ''
+	def __init__(self):
+		os.chdir(DOWNLOADDIR)
+		filelist = os.listdir(DOWNLOADDIR)
+		ID = 0
+		for file in filelist:
+			self.fileID[ID] = ID
+			self.fileName[ID] = file
+			self.filePath[ID] = DOWNLOADDIR + file
+			self.fileSize[ID] = os.path.getsize(self.filePath[ID])
+			self.fileExtended = '' ## TODO: Implement reading of meta-info from files.
+			ID++
+
+
+class Connection:
+	server = ''	
 	rSocket = None
 	wSocket = None
 	connected = False
+	serventID = ''
+	localIP = ''
+	localPort = 0
+	speed = 10			##TODO: Implement speed checking
 	
-	def __init__(self, address):
+	def __init__(self, address):		#initiate connection
 		try:
 			debug(address)
 			servantSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -71,6 +120,13 @@ class Connection:
 			self.wSocket.write('GNUTELLA/0.6 200 OK')
 			self.wSocket.write('\r\n')
 			self.connected = True
+			
+			for i in range(15):				##FIXME: Generates a completely random ID, while it optimaly
+				sID = sID + chr(random.randint(0,255))	## should be a function of the servents network address.
+			self.serventID = sID				## Maybe use MAC-address?
+			
+			self.localPort = SERVEPORT			##TODO: read the port from somewhere.
+
 			debug('found a host')
 			return None
 
@@ -80,9 +136,12 @@ class Connection:
 				self.rSocket.close()
 				servantSocket.close()
 			except:
-				print "Something is horribly wrong!"
+				alert('Socket error while trying to connect to servent!')
 			self.connected = False
 			return
+		
+
+
 		
 	def sendPing(self):
 		guid = generateGUID
@@ -100,12 +159,12 @@ class Connection:
 	
 	def sendQuery(self, firewalled, criteria):
 		newSemantic = '1'
-		enableXML = '0'
+		enableXML = '0'		##TODO: Implement XML support, LGDQ, ggeph oob, and the rest.
 		LGDQ = '0'
 		ggepH = '0'
 		outOfBand = '0'
 		reserved = '0000000000'
-		minSpeed = chr(int(reserved + outOfBand + ggepH + LGDQ + enableXML + firewalled + newSemantic, 2)) #16 bits = 2 bytes
+		minSpeed = chr(int(reserved + outOfBand + ggepH + LGDQ + enableXML + firewalled + newSemantic, 2)) #16 bits=2 bytes
 		
 		payload = minSpeed + criteria + '\x00' #2 bytes with minSpeed + search criteria terminated with 0x00
 		
@@ -115,45 +174,55 @@ class Connection:
 		hops = 0
 		self.sendMessage(guid, payloadType, ttl, 0, payload)
 		
-	def sendQueryHit(self, numHits, port, host, speed):
-		###################TODO
-		pass
+	def sendQueryHit(self, filelist):
+		speed = self.speed
+		port = self.localPort
+		ip = self.localIP
+		resultSet = ''
+		numHits = 0
+		for ID in filelist.fileID:
+			resultSet = resultSet + str(ID)
+			resultSet = resultSet + str(filelist.fileSize[ID])
+			resultSet = resultSet + filelist.fileName[ID] + '\x00'
+			resultSet = resultSet + filelist.fileExtended[ID] + '\x00'
+			numHits++
+		EQHD = ''				##TODO: Implement EQHD
+		payload = str(numHits) + str(port) + str(ip) + str(speed) + resultSet + EQHD + self.serventID
+		guid = generateGUID
+		self.sendMessage(guid, payloadType = '\x81', tll = 7, hops = 0, payload)
+
+	def sendPush (self, serventID, fileID):			#Remote servent ID, in case you're wondering
+		port = self.localPort
+		ip = self.localIP
+		guid = generateGUID
+		payload = serventID + str(fileID) + ip + str(port)
+		self.sendMessage(guid, payloadType = '\0x40', ttl = 7, hops = 0, payload)
 
 	def sendMessage(self, guid, payloadType, ttl, hops, payload):
 		payloadLength = len(payload)
-		
 		header = guid + payloadTypes(payloadType) + ttl + hops + payloadLength
-		
 		package = header + payload
-		
 		self.wSocket.write(package)
 
 
-	def generateGUID(self):
-		guid = ''
-		for i in range(7):
-			guid = guid + chr(random.randint(0,255))
-		guid = guid + '\xff'
-		for i in range(6):
-			guid = guid + chr(random.randint(0,255))
-		guid = guid + '\x00'
-		return guid
 
 
 
 class Hosts:
 	list = [ ]
+
 	def __init__(self):
 		self.list = [ ]
 		self.list = self.load()
 		if not self.list:
 			debug('getting new hosts')
-			self.list = self.gwebcache('http://gwc.dietpac.com:8080/?hostfile=1&client=QPYT&version=0.1')
+			self.list = self.gwebcache(WEBCACHE)
 		if not self.list:
 			print 'Cannot find any hosts!'
 			sys.exit()
 		else:
 			self.save(self.list)
+
 	def gwebcache(self, url):
 		try:
 			hostList = urllib.urlopen(url).read(MAX_PAGE_LEN)
@@ -161,7 +230,6 @@ class Hosts:
 			print 'I/O Error when reading URL',url,':\n',e.strerror
 			sys.exit()
 		return hostList.splitlines()
-
 
 	def save(self, hostlist):
 		debug(hostlist)
@@ -175,6 +243,7 @@ class Hosts:
 		except IOError,e:
 			print 'error writing hosts file'
 			sys.exit()
+
 	def load(self):
 		global hostfilename
 		try:
@@ -196,5 +265,5 @@ class Hosts:
 	#if (host.connected == True):
 		#break
 
-
+#host.server = BaseHTTPServer.HTTPServer(('',host.localPort),SimpleHTTPServer.SimpleHTTPRequestHandler)
 #server.serve_forever()
