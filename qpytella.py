@@ -1,28 +1,44 @@
-########################################
-"""  Nugatti  v0.01                  """
-"""   - GNUtella/Python/Qt           """
-"""                                  """
-"""     ~    network stuff    ~      """
-########################################
-"""COPYRIGHT MARTIN T. SANDSMARK 2007"""
-########################################
+# -*- coding: utf-8 -*-
 
-#TODO: Implement not-really-needed-stuff, testing if it connects
+#######################################
+##                                   ##
+##  Nugatti  v0.0X                   ##
+##   - GNUtella/Python/Qt            ##
+##                                   ##
+##     ~    network stuff    ~       ##
+##                                   ##
+##                                   ##
+#######################################
+
+##########################################
+### COPYRIGHT                          ###
+###         MARTIN T. SANDSMARK 2006/7 ###
+##########################################
+
+# TODO:
+#  ¤ Implement not-really-needed-stuff (experimental gnutella stuff)
+#  ¤ testing if it connects
+#  ¤ (http) serving code
+#  ¤ pad payloadlength properly
 
 import BaseHTTPServer, SimpleHTTPServer
-import os, urllib, sys, socket, random
+import os, urllib, sys, socket, random, threading
+
+import ConfigParser
 
 #version = '?hostfile=1&client=QPYT&version=0.1'
 
 
 #gwebcache = gwebcache + version
 
+MAX_PACKET_SIZE = 1024
 MAX_PAGE_LEN = 20000
 SERVEPORT = 7770
 VENDORCODE = 'NUGT'
 HOSTFILENAME = 'hosts.txt'
 DOWNLOADDIR = '/home/martin/Downloads'
 WEBCACHE = 'http://gwc.dietpac.com:8080/?hostfile=1&client=QPYT&version=0.1'
+
 DEBUG = 0
 
 #payloadType = {'Ping'		: '\x00',
@@ -41,32 +57,39 @@ def addressToTuple(combined):
 	return (addressAndPort[0], addressAndPort[1])
 
 def debug(message):
-	if DEBUG print message
+	if DEBUG: print message
 	return
 
-def alert(message):
+def alert(message):  #Do some voodoo and pop up a qdialog here
 	print message
 
-def generateGUID(self):
+def generateGUID():
 	guid = ''
 	for i in range(7):
 		guid = guid + chr(random.randint(0,255))
 	guid = guid + '\xff'
-	for i in range(6):
+	for i in range(7):
 		guid = guid + chr(random.randint(0,255))
 	guid = guid + '\x00'
 	return guid
 
-def getFile(ip, port, path):
-	queryAddress = 'http://' + ip + ':' + port + '/' + path
-	
+def getFile(ip, port, filename, fileID):
+	file = ''
+	path = '/get/' + str(fileID) + filename
+	queryAddress = 'http://' + ip + ':' + port + path
+	fileContent = urllib.urlopen(queryAddress).read()
+	file = open(DOWNLOADDIR + filename, 'w')
+	file.write(fileContent)
+	file.close()
+	return true
+
 
 class fileList:
-	fileID[] = 0
-	fileName[] = ''
-	filePath[] = ''
-	fileSize[] = 0
-	fileExtended[] = ''
+	#fileID[] = 0
+	#fileName[] = ''
+	#filePath[] = ''
+	#fileSize[] = 0
+	#fileExtended[] = ''
 	def __init__(self):
 		os.chdir(DOWNLOADDIR)
 		filelist = os.listdir(DOWNLOADDIR)
@@ -76,8 +99,9 @@ class fileList:
 			self.fileName[ID] = file
 			self.filePath[ID] = DOWNLOADDIR + file
 			self.fileSize[ID] = os.path.getsize(self.filePath[ID])
-			self.fileExtended = '' ## TODO: Implement reading of meta-info from files.
-			ID++
+			self.fileExtended = '' ## TODO: Implement reading of 
+						# meta-info from files.
+			ID += 1
 
 
 class Connection:
@@ -91,6 +115,7 @@ class Connection:
 	speed = 10			##TODO: Implement speed checking
 	
 	def __init__(self, address):		#initiate connection
+		return
 		try:
 			debug(address)
 			servantSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -144,7 +169,7 @@ class Connection:
 
 		
 	def sendPing(self):
-		guid = generateGUID
+		guid = generateGUID()
 		ttl = 7
 		hops = 0
 		payloadType = '\x00' #Ping
@@ -168,7 +193,7 @@ class Connection:
 		
 		payload = minSpeed + criteria + '\x00' #2 bytes with minSpeed + search criteria terminated with 0x00
 		
-		guid = generateGUID
+		guid = generateGUID()
 		payloadType = '\x80'
 		ttl = 7
 		hops = 0
@@ -185,25 +210,57 @@ class Connection:
 			resultSet = resultSet + str(filelist.fileSize[ID])
 			resultSet = resultSet + filelist.fileName[ID] + '\x00'
 			resultSet = resultSet + filelist.fileExtended[ID] + '\x00'
-			numHits++
+			numHits += 1
 		EQHD = ''				##TODO: Implement EQHD
 		payload = str(numHits) + str(port) + str(ip) + str(speed) + resultSet + EQHD + self.serventID
-		guid = generateGUID
-		self.sendMessage(guid, payloadType = '\x81', tll = 7, hops = 0, payload)
+		guid = generateGUID()
+		payloadType = '\x81'
+		tll = 7
+		hops = 0
+		self.sendMessage(guid, payloadType, tll, hops, payload)
 
 	def sendPush (self, serventID, fileID):			#Remote servent ID, in case you're wondering
 		port = self.localPort
 		ip = self.localIP
-		guid = generateGUID
+		guid = generateGUID()
 		payload = serventID + str(fileID) + ip + str(port)
-		self.sendMessage(guid, payloadType = '\0x40', ttl = 7, hops = 0, payload)
+		payloadType = '\0x40'
+		ttl = 7
+		hops = 0
+		self.sendMessage(guid, payloadType, ttl, hops, payload)
 
 	def sendMessage(self, guid, payloadType, ttl, hops, payload):
 		payloadLength = len(payload)
-		header = guid + payloadTypes(payloadType) + ttl + hops + payloadLength
+		headerPad = ''
+		if payloadLength < 4:
+			for i in range(4 - payloadLength):
+				headerPad = headerPad + '\x00'
+		header = guid + payloadType + str(ttl) + str(hops) + str(payloadLength) + headerPad
 		package = header + payload
 		self.wSocket.write(package)
 
+	def parseLoop(self):
+		loop = 1
+		packet = ''
+		while (loop == 1):
+			data = ''
+			while (data == ''):
+				data = self.rSocket.recv(MAX_PACKET_SIZE)
+			packet = packet + data
+			if (len(packet) > 23):
+				guid = packet[0:15]
+				payloadType = packet[16]
+				ttl = packet[17]
+				hops = packet[18]
+				payloadLength = packet[19:22]
+			if ((23 + atoi(payloadLength)) <= len(packet)):
+				payload = packet[23:(23+payloadLength
+				
+				packet = packet[(23 + atoi(payloadLength)):]
+				
+		
+		
+		###Parse the darn package.
 
 
 
@@ -227,7 +284,7 @@ class Hosts:
 		try:
 			hostList = urllib.urlopen(url).read(MAX_PAGE_LEN)
 		except IOError, e:
-			print 'I/O Error when reading URL',url,':\n',e.strerror
+			alert('I/O Error when reading URL' + url + ':\n' + e.strerror)
 			sys.exit()
 		return hostList.splitlines()
 
@@ -241,7 +298,7 @@ class Hosts:
 				output.write(line)
 			output.close()
 		except IOError,e:
-			print 'error writing hosts file'
+			alert('error writing hosts file')
 			sys.exit()
 
 	def load(self):
@@ -265,5 +322,7 @@ class Hosts:
 	#if (host.connected == True):
 		#break
 
-#host.server = BaseHTTPServer.HTTPServer(('',host.localPort),SimpleHTTPServer.SimpleHTTPRequestHandler)
+#host.server = BaseHTTPServer.HTTPServer(('',host.localPort),SimpleHTTPServer.SimpleHTTPRequestHandler) 
 #server.serve_forever()
+lol = Connection (('0', 778))
+lol.sendPing()
