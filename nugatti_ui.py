@@ -6,7 +6,7 @@
 #      by: The PyQt User Interface Compiler (pyuic) 3.17
 #
 # WARNING! All changes made in this file will be lost!
-
+#(c)mtsproductions
 
 from qt import *
 from kdeui import *

@@ -3,7 +3,7 @@
 #######################################
 ##                                   ##
 ##  Nugatti  v0.0X                   ##
-##   - GNUtella/Python/Qt            ##
+##   - Gnutella/Python/Qt            ##
 ##                                   ##
 ##     ~    network stuff    ~       ##
 ##                                   ##
@@ -13,18 +13,22 @@
 ##########################################
 ### COPYRIGHT                          ###
 ###         MARTIN T. SANDSMARK 2006/7 ###
+###       www.mts-productions.com      ###
 ##########################################
 
 # TODO:
 #  ¤ Implement not-really-needed-stuff (experimental gnutella stuff)
-#  ¤ testing if it connects
+#  ¤ Actually do something with parsed packages (like answer and send files)
+#  ¤ Threading
+#  ¤ testing if it works
 #  ¤ (http) serving code
 #  ¤ pad payloadlength properly
+#  ¤ Register the "NUGT" vendorcode the right place
+#  ¤ Read metadata from files (mutagen?)
+#_____________________________________ ____ ___ __ _
 
 import BaseHTTPServer, SimpleHTTPServer
 import os, urllib, sys, socket, random, threading
-
-import ConfigParser
 
 #version = '?hostfile=1&client=QPYT&version=0.1'
 
@@ -32,14 +36,14 @@ import ConfigParser
 #gwebcache = gwebcache + version
 
 MAX_PACKET_SIZE = 1024
-MAX_PAGE_LEN = 20000
+MAX_PAGE_LEN = 20000 # for reading gwebcache
 SERVEPORT = 7770
-VENDORCODE = 'NUGT'
+VENDORCODE = 'NUGT' ## TODO: Register this.
 HOSTFILENAME = 'hosts.txt'
 DOWNLOADDIR = '/home/martin/Downloads'
 WEBCACHE = 'http://gwc.dietpac.com:8080/?hostfile=1&client=QPYT&version=0.1'
 
-DEBUG = 0
+DEBUG = 1
 
 #payloadType = {'Ping'		: '\x00',
 		#'Pong'		: '\x01',
@@ -57,7 +61,8 @@ def addressToTuple(combined):
 	return (addressAndPort[0], addressAndPort[1])
 
 def debug(message):
-	if DEBUG: print message
+	#if DEBUG: 
+	print message
 	return
 
 def alert(message):  #Do some voodoo and pop up a qdialog here
@@ -114,42 +119,41 @@ class Connection:
 	localPort = 0
 	speed = 10			##TODO: Implement speed checking
 	
-	def __init__(self, address):		#initiate connection
-		return
+	def __init__(self, address):		#initiate connection with servent at `address`-tuple
 		try:
 			debug(address)
 			servantSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 			servantSocket.connect(address)
 			self.rSocket = servantSocket.makefile("rb", 0)
 			self.wSocket = servantSocket.makefile("wb", 0)
-		
+			debug("initiate handshake...")	
 			self.wSocket.write("GNUTELLA CONNECT/0.6\r\n")
-			self.wSocket.write("User-Agent: qPyTella/0.1\r\n")
+			self.wSocket.write("User-Agent: Nugatti/0.1\r\n")
 			self.wSocket.write("Pong-Caching: 0.1\r\n")
 			self.wSocket.write("GGEP: 0.1\r\n")
 			self.wSocket.write("X-Ultrapeer: False\r\n")
 			self.wSocket.write("\r\n")
-
+			debug("sent handshake, waiting for reply")
 			reply = self.rSocket.readline()
-			if ("200" not in reply):
+			if ("2" not in reply):
 				print 'Host reply error:', reply
 				self.wSocket.close()
 				self.rSocket.close()
 				self.connected = False
 				return
-		
+			debug("our handshake acknowledged")
 			while reply != '\r\n':
 				reply = self.rSocket.readline()
 				debug(reply)
-		
+			debug("acknowledging other handshake")
 			self.wSocket.write('GNUTELLA/0.6 200 OK')
 			self.wSocket.write('\r\n')
 			self.connected = True
-			
+
 			for i in range(15):				##FIXME: Generates a completely random ID, while it optimaly
 				sID = sID + chr(random.randint(0,255))	## should be a function of the servents network address.
 			self.serventID = sID				## Maybe use MAC-address?
-			
+
 			self.localPort = SERVEPORT			##TODO: read the port from somewhere.
 
 			debug('found a host')
@@ -162,7 +166,8 @@ class Connection:
 				servantSocket.close()
 			except:
 				alert('Socket error while trying to connect to servent!')
-			self.connected = False
+				self.connected = False
+				sys.exit()
 			return
 		
 
@@ -194,7 +199,7 @@ class Connection:
 		payload = minSpeed + criteria + '\x00' #2 bytes with minSpeed + search criteria terminated with 0x00
 		
 		guid = generateGUID()
-		payloadType = '\x80'
+		payloadType = '\x80' #Query
 		ttl = 7
 		hops = 0
 		self.sendMessage(guid, payloadType, ttl, 0, payload)
@@ -214,7 +219,7 @@ class Connection:
 		EQHD = ''				##TODO: Implement EQHD
 		payload = str(numHits) + str(port) + str(ip) + str(speed) + resultSet + EQHD + self.serventID
 		guid = generateGUID()
-		payloadType = '\x81'
+		payloadType = '\x81' #Query hit
 		tll = 7
 		hops = 0
 		self.sendMessage(guid, payloadType, tll, hops, payload)
@@ -224,7 +229,7 @@ class Connection:
 		ip = self.localIP
 		guid = generateGUID()
 		payload = serventID + str(fileID) + ip + str(port)
-		payloadType = '\0x40'
+		payloadType = '\0x40' #Push
 		ttl = 7
 		hops = 0
 		self.sendMessage(guid, payloadType, ttl, hops, payload)
@@ -237,26 +242,34 @@ class Connection:
 				headerPad = headerPad + '\x00'
 		header = guid + payloadType + str(ttl) + str(hops) + str(payloadLength) + headerPad
 		package = header + payload
+		debug(package)
 		self.wSocket.write(package)
 
 	def parseLoop(self):
 		loop = 1
 		packet = ''
+		
+		guid = ''
+		payloadType = ''
+		ttl = 0
+		hops = 0
+		payloadLength = 0
+		
 		while (loop == 1):
 			data = ''
 			while (data == ''):
 				data = self.rSocket.recv(MAX_PACKET_SIZE)
 			packet = packet + data
-			if (len(packet) > 23):
+			if (len(packet) > 23): # We have received enough data for a full header, so we try to parse it.
 				guid = packet[0:15]
 				payloadType = packet[16]
-				ttl = packet[17]
-				hops = packet[18]
-				payloadLength = packet[19:22]
-			if ((23 + atoi(payloadLength)) <= len(packet)):
-				payload = packet[23:(23+payloadLength
-				
-				packet = packet[(23 + atoi(payloadLength)):]
+				ttl = atoi(packet[17])
+				hops = atoi(packet[18])
+				payloadLength = atoi(packet[19:22]) # Not very fault tolerant is it? TCP ftw.
+			if ((23 + atoi(payloadLength)) <= len(packet)): #Check if we have received the whole package
+				payload = packet[23:(23+payloadLength)]
+				## DO MAGIC!
+				packet = packet[(23 + atoi(payloadLength)):] ## Return the unused packetparts
 				
 		
 		
@@ -272,7 +285,7 @@ class Hosts:
 		self.list = [ ]
 		self.list = self.load()
 		if not self.list:
-			debug('getting new hosts')
+			debug('no hosts saved, getting new hosts')
 			self.list = self.gwebcache(WEBCACHE)
 		if not self.list:
 			print 'Cannot find any hosts!'
@@ -284,7 +297,7 @@ class Hosts:
 		try:
 			hostList = urllib.urlopen(url).read(MAX_PAGE_LEN)
 		except IOError, e:
-			alert('I/O Error when reading URL' + url + ':\n' + e.strerror)
+			alert('I/O Error when reading gwebcache from URL' + url + ':\n' + e.strerror)
 			sys.exit()
 		return hostList.splitlines()
 
@@ -324,5 +337,6 @@ class Hosts:
 
 #host.server = BaseHTTPServer.HTTPServer(('',host.localPort),SimpleHTTPServer.SimpleHTTPRequestHandler) 
 #server.serve_forever()
-lol = Connection (('0', 778))
+lol = Connection (('127.0.0.1', 33587))
+print lol
 lol.sendPing()

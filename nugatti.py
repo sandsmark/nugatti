@@ -7,9 +7,9 @@
 
 from qt import *
 from nugatti_ui import *
-from qpytella import *
+#from qpytella import *
 import sys
-from kdeui import *
+from kdeui import KLed
 
 class Nugatti(Nugatti_ui):
 	
